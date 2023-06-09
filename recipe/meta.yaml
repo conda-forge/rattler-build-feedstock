@@ -37,6 +37,7 @@ requirements:
     - make  # [unix]
   host:
     - openssl  # [linux]
+    - libgit2
 
 test:
   commands:
