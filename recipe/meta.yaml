@@ -1,5 +1,5 @@
 {% set name = "rattler-build" %}
-{% set version = "0.7.1rc9" %}
+{% set version = "0.8.2rc1" %}
 
 package:
   name: {{ name|lower }}
