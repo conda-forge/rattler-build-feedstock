@@ -31,12 +31,6 @@ requirements:
   build:
     - {{ compiler('rust') }}
     - cargo-bundle-licenses
-    # to compile the libsolv parts
-    - {{ compiler('c') }}
-    - {{ stdlib("c") }}
-    - {{ compiler('cxx') }}
-    - cmake
-    - make  # [unix]
   host:
     - openssl  # [linux]
 
