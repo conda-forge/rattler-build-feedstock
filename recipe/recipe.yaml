@@ -58,7 +58,7 @@ about:
     - LICENSE
     - THIRDPARTY.yml
     - CONDA_BUILD_LICENSE.txt
-  documentation: https://prefix-dev.github.io/rattler-build
+  documentation: https://rattler.build
 
 extra:
   recipe-maintainers:
