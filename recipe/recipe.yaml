@@ -33,6 +33,7 @@ requirements:
   build:
     - ${{ compiler('rust') }}
     - ${{ stdlib('c') }}
+    - ${{ compiler('c') }}
     - cargo-bundle-licenses
   host:
     - ${{ "openssl" if linux }}
