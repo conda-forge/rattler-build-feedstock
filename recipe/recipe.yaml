@@ -12,6 +12,9 @@ source:
 
 build:
   script:
+    - if: osx and x86_64
+      then: 
+        - if [[ "${MACOSX_SDK_VERSION}" != "12" ]]; then exit 1; fi
     - if: unix
       then:
         # Unix recipe
