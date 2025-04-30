@@ -23,7 +23,9 @@ build:
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
       else:
         # Win recipe
-        - git config --global core.longpaths true
+        # hack: path too long for pixi_config subpackage
+        - set CARGO_HOME=C:\.cargo
+        - md %CARGO_HOME%
         - cargo install --locked --bins --root %PREFIX% --path . --no-track
         - if errorlevel 1 exit 1
         - cargo-bundle-licenses --format yaml --output %SRC_DIR%/THIRDPARTY.yml
