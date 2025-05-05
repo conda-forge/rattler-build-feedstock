@@ -12,13 +12,15 @@ source:
 
 build:
   script:
-    - if: osx
+    # - if: osx
+    #   then:
+    #     - if [[ "${MACOSX_SDK_VERSION}" != "11.0" ]]; then exit 1; fi
+    - if: linux
       then:
-        - if [[ "${MACOSX_SDK_VERSION}" != "11.0" ]]; then exit 1; fi
+        - export OPENSSL_DIR="$PREFIX"
     - if: unix
       then:
         # Unix recipe
-        - export OPENSSL_DIR="$PREFIX"
         - cargo install --locked --bin rattler-build --root ${PREFIX} --path . --no-track
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
       else:
@@ -50,7 +52,12 @@ tests:
       - if: unix
         then:
           - test ! -f ${PREFIX}/bin/generate-cli-docs
+      # check that we can fetch the sourcecode for slepc
+      - rattler-build build --recipe ./test-recipe
 
+    files:
+      recipe: 
+        - test-recipe/
 
 about:
   homepage: https://github.com/prefix-dev/rattler-build
