@@ -53,7 +53,7 @@ tests:
         then:
           - test ! -f ${PREFIX}/bin/generate-cli-docs
       # check that we can fetch the sourcecode for slepc
-      - rattler-build build --recipe ./test-recipe -vvvv
+      - rattler-build build --recipe ./test-recipe -vvvvvvv
 
     files:
       recipe: 
