@@ -7,8 +7,8 @@ package:
   version: ${{ version }}
 
 source:
-  url: https://github.com/minrk/rattler-build/archive/5d7aac5c62aa594e4747a2a96b72cbfb1fe68ba2.tar.gz
-  sha256: d054e5e2937d8c106bbf5f35213cf02c4c8c205e4ab951039882441f9f9274ac
+  url: https://github.com/minrk/rattler-build/archive/9623678b6ccfcd30d7778ef99da0a53540ff2903.tar.gz
+  sha256: 684e627cad11d13add3394e6957b77d34e3bb00cd7f577b5b9bfd301c2b13be9
 
 build:
   script:
