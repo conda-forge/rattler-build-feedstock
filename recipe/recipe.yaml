@@ -1,14 +1,14 @@
 context:
   name: rattler-build
-  version: "0.41.0"
+  version: "0.40.0"
 
 package:
   name: ${{ name }}
   version: ${{ version }}
 
 source:
-  url: https://github.com/minrk/rattler-build/archive/9623678b6ccfcd30d7778ef99da0a53540ff2903.tar.gz
-  sha256: 684e627cad11d13add3394e6957b77d34e3bb00cd7f577b5b9bfd301c2b13be9
+  url: https://github.com/prefix-dev/rattler-build/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: 9da7dd6d0c86ca5fc0eb06768a9edaf7288a54c936f2d20f7923fcaf705e96db
 
 build:
   script:
