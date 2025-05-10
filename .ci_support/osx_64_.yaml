@@ -11,14 +11,12 @@ c_stdlib:
 c_stdlib_version:
 - '11.0'
 channel_sources:
-- conda-forge
+- conda-forge/label/rust_dev,conda-forge
 channel_targets:
 - conda-forge main
 macos_machine:
 - x86_64-apple-darwin13.4.0
 rust_compiler:
 - rust
-rust_compiler_version:
-- 1.85.1
 target_platform:
 - osx-64
