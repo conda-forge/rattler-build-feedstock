@@ -11,6 +11,8 @@ source:
   sha256: dd2192b323aadf42364543325e632f81b90cf8eff74f0f5029cccd940cc8da49
 
 build:
+  skip:
+    - not (osx and x86_64)
   script:
     - if: linux
       then:
