@@ -1,6 +1,6 @@
 context:
   name: rattler-build
-  version: "0.41.0"
+  version: "0.42.0"
 
 package:
   name: ${{ name }}
@@ -8,7 +8,7 @@ package:
 
 source:
   url: https://github.com/prefix-dev/rattler-build/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: dd2192b323aadf42364543325e632f81b90cf8eff74f0f5029cccd940cc8da49
+  sha256: 59094e3d07fbe991c91f98ef511df2ea7f265be89de3d1e5dbee29242668b27f
 
 build:
   script:
@@ -50,6 +50,13 @@ tests:
       - if: unix
         then:
           - test ! -f ${PREFIX}/bin/generate-cli-docs
+          # check that we can fetch the sourcecode for slepc
+          - rattler-build build --recipe ./test-recipe/check.yaml
+        else:
+          - rattler-build build --recipe ./test-recipe/check.yaml --output-dir %PREFIX%/out
+    files:
+      recipe:
+        - test-recipe/
 
 
 about:
