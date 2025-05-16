@@ -50,9 +50,10 @@ tests:
       - if: unix
         then:
           - test ! -f ${PREFIX}/bin/generate-cli-docs
-      # check that we can fetch the sourcecode for slepc
-      - rattler-build build --recipe ./test-recipe
-
+          # check that we can fetch the sourcecode for slepc
+          - rattler-build build --recipe ./test-recipe/check.yaml
+        else:
+          - rattler-build build --recipe ./test-recipe/check.yaml --output-dir %PREFIX%/out
     files:
       recipe:
         - test-recipe/
