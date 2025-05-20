@@ -26,6 +26,9 @@ build:
         # hack: path too long for pixi_config subpackage, https://github.com/prefix-dev/pixi/issues/3691
         - set CARGO_HOME=C:\.cargo
         - md %CARGO_HOME%
+        - if: target_platform == "win-arm64"
+          then:
+            - set CARGO_TARGET=aarch64-pc-windows-msvc
         - cargo install --locked --bins --root %PREFIX% --path . --no-track
         - if errorlevel 1 exit 1
         - cargo-bundle-licenses --format yaml --output %SRC_DIR%/THIRDPARTY.yml
@@ -34,10 +37,14 @@ build:
 
 requirements:
   build:
+    - if: target_platform == "win-arm64"
+      then:
+        - clang
     - ${{ compiler('rust') }}
     - ${{ stdlib('c') }}
     - ${{ compiler('c') }}
     - cargo-bundle-licenses
+    - vswhere
   host:
     - ${{ "openssl" if linux }}
   run:
@@ -46,7 +53,7 @@ requirements:
 tests:
   - script:
       - rattler-build --help
-    # check that `bin/generate-cli-docs` is not present
+      # check that `bin/generate-cli-docs` is not present
       - if: unix
         then:
           - test ! -f ${PREFIX}/bin/generate-cli-docs
@@ -57,7 +64,6 @@ tests:
     files:
       recipe:
         - test-recipe/
-
 
 about:
   homepage: https://github.com/prefix-dev/rattler-build
@@ -79,4 +85,4 @@ extra:
     - nichmor
     - wolfv
     - pavelzw
-    - '0xbe7a'
+    - "0xbe7a"
