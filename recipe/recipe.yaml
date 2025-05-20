@@ -11,7 +11,6 @@ source:
   sha256: 59094e3d07fbe991c91f98ef511df2ea7f265be89de3d1e5dbee29242668b27f
 
 build:
-  skip: target_platform != "win-arm64"
   script:
     - if: osx
       then:
