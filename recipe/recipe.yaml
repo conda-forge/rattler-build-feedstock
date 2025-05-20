@@ -29,6 +29,7 @@ build:
         - md %CARGO_HOME%
         - if: target_platform == "win-arm64"
           then:
+            - set CC=clang
             - set CARGO_TARGET=aarch64-pc-windows-msvc
         - cargo install --locked --bins --root %PREFIX% --path . --no-track
         - if errorlevel 1 exit 1
@@ -40,12 +41,12 @@ requirements:
   build:
     - if: target_platform == "win-arm64"
       then:
-        - clang
+        - clang # ring need it for cross-compiling to target aarch64-pc-windows-msvc
+        - vswhere
     - ${{ compiler('rust') }}
     - ${{ stdlib('c') }}
     - ${{ compiler('c') }}
     - cargo-bundle-licenses
-    - vswhere
   host:
     - ${{ "openssl" if linux }}
   run:
