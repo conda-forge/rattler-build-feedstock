@@ -1,6 +1,6 @@
 context:
   name: rattler-build
-  version: "0.42.0"
+  version: "0.43.1"
 
 package:
   name: ${{ name }}
@@ -8,13 +8,15 @@ package:
 
 source:
   url: https://github.com/prefix-dev/rattler-build/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: 59094e3d07fbe991c91f98ef511df2ea7f265be89de3d1e5dbee29242668b27f
+  sha256: 9be66bfd9f5f84e766526c0b9752dbd14da87f34df4f2a2b398874fcb4f47719
 
 build:
   script:
-    - if: osx
+    - if: osx and x86_64
       then:
         - if [[ "${MACOSX_SDK_VERSION}" != "11.0" ]]; then exit 1; fi
+        # use the default linker for macOS as we are hitting a bug with the conda-forge linker
+        - unset CARGO_TARGET_X86_64_APPLE_DARWIN_LINKER
     - if: unix
       then:
         # Unix recipe
