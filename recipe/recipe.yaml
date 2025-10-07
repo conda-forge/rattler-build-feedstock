@@ -1,6 +1,6 @@
 context:
   name: rattler-build
-  version: "0.48.0"
+  version: "0.47.1"
 
 package:
   name: ${{ name }}
@@ -8,7 +8,7 @@ package:
 
 source:
   url: https://github.com/prefix-dev/rattler-build/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: f627acc54b8c559fa49e36010623bb3541955010e84b2cec3cdcbb778c670090
+  sha256: 56a0c8307893b347eefc24612bb8a81f8cc2ef274aa336608b4bc373346f2584
 
 build:
   script:
@@ -32,7 +32,7 @@ build:
         - if errorlevel 1 exit 1
         - cargo-bundle-licenses --format yaml --output %SRC_DIR%/THIRDPARTY.yml
         - if errorlevel 1 exit 1
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -56,6 +56,15 @@ tests:
           - rattler-build build --recipe ./test-recipe/check.yaml
         else:
           - rattler-build build --recipe ./test-recipe/check.yaml --output-dir %PREFIX%/out
+
+      # test cross-compilation environment setups
+      - if: osx and x86_64
+        then:
+          - rattler-build build --target-platform osx-arm64 --recipe ./test-recipe/check.yaml
+      - if: linux and x86_64
+        then:
+          - rattler-build build --target-platform linux-aarch64 --recipe ./test-recipe/check.yaml
+          - rattler-build build --target-platform linux-ppc64le --recipe ./test-recipe/check.yaml
     files:
       recipe:
         - test-recipe/

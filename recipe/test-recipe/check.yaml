@@ -5,3 +5,40 @@ package:
 source:
   url: https://slepc.upv.es/download/distrib/slepc-3.23.1.tar.gz
   sha256: c2fde066521bbccfbc80aa15182bca69ffaf00a7de648459fd04b81589896238
+
+build:
+  script:
+    - ${{ 'ls' if unix else 'dir' }}
+
+requirements:
+  # make sure virtual packages are satisfiable
+  build:
+    - ${{ compiler("c") }}
+  host:
+    - zlib
+    - if: osx
+      then:
+        - __osx >=11
+    - if: linux
+      then:
+        - __glibc >=2.17
+        - __linux >=5
+    - if: win
+      then:
+        - __win >=10
+
+tests:
+  - script:
+      - ${{ 'ls' if unix else 'dir' }}
+    requirements:
+      run:
+        - if: osx
+          then:
+            - __osx >=11
+        - if: linux
+          then:
+            - __glibc >=2.17
+            - __linux >=5
+        - if: win
+          then:
+            - __win >=10
