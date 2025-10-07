@@ -5,3 +5,10 @@ package:
 source:
   url: https://slepc.upv.es/download/distrib/slepc-3.23.1.tar.gz
   sha256: c2fde066521bbccfbc80aa15182bca69ffaf00a7de648459fd04b81589896238
+
+requirements:
+  # make sure virtual packages are satisfiable
+  build:
+    - ${{ compiler("c") }}
+  host:
+    - zlib
