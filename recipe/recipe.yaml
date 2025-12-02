@@ -23,7 +23,7 @@ build:
         - export OPENSSL_DIR="$PREFIX"
         - export CARGO_PROFILE_RELEASE_LTO=true
         - export CARGO_PROFILE_RELEASE_STRIP=symbols
-        - cargo install --locked --features performance --bin rattler-build --root ${PREFIX} --path . --no-track
+        - cargo auditable install --locked --features performance --bin rattler-build --root ${PREFIX} --path . --no-track
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
       else:
         # Win recipe
@@ -32,10 +32,8 @@ build:
         - md %CARGO_HOME%
         - set "CARGO_PROFILE_RELEASE_LTO=true"
         - set "CARGO_PROFILE_RELEASE_STRIP=symbols"
-        - cargo install --locked --features performance --bins --root %PREFIX% --path . --no-track
-        - if errorlevel 1 exit 1
+        - cargo auditable install --locked --features performance --bins --root %PREFIX% --path . --no-track
         - cargo-bundle-licenses --format yaml --output %SRC_DIR%/THIRDPARTY.yml
-        - if errorlevel 1 exit 1
   number: 0
 
 requirements:
@@ -43,6 +41,7 @@ requirements:
     - ${{ compiler('rust') }}
     - ${{ stdlib('c') }}
     - ${{ compiler('c') }}
+    - cargo-auditable
     - cargo-bundle-licenses
   host:
     - ${{ "openssl" if linux }}
