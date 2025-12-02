@@ -23,7 +23,7 @@ build:
         - export OPENSSL_DIR="$PREFIX"
         - export CARGO_PROFILE_RELEASE_LTO=true
         - export CARGO_PROFILE_RELEASE_STRIP=symbols
-        - cargo auditable install --locked --features performance --bin rattler-build --root ${PREFIX} --path . --no-track
+        - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,s3,performance --bin rattler-build --root ${PREFIX} --path . --no-track
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
       else:
         # Win recipe
@@ -32,7 +32,7 @@ build:
         - md %CARGO_HOME%
         - set "CARGO_PROFILE_RELEASE_LTO=true"
         - set "CARGO_PROFILE_RELEASE_STRIP=symbols"
-        - cargo auditable install --locked --features performance --bins --root %PREFIX% --path . --no-track
+        - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,s3,performance --bins --root %PREFIX% --path . --no-track
         - cargo-bundle-licenses --format yaml --output %SRC_DIR%/THIRDPARTY.yml
   number: 0
 
