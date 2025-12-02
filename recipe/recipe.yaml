@@ -49,6 +49,9 @@ requirements:
     - ${{ "patchelf" if linux }}
 
 tests:
+  - package_contents:
+      bin:
+        - rattler-build
   - script:
       - rattler-build --help
     # check that `bin/generate-cli-docs` is not present
