@@ -12,38 +12,38 @@ source:
 
 build:
   script:
-    - if: osx and x86_64
-      then:
-        - if [[ "${MACOSX_SDK_VERSION}" != "11.0" ]]; then exit 1; fi
-        # use the default linker for macOS as we are hitting a bug with the conda-forge linker
-        - unset CARGO_TARGET_X86_64_APPLE_DARWIN_LINKER
-    - if: unix
-      then:
-        # Unix recipe
-        - export OPENSSL_DIR="$PREFIX"
-        - export CARGO_PROFILE_RELEASE_LTO=true
-        - export CARGO_PROFILE_RELEASE_STRIP=symbols
-        - if: target_platform == "linux-ppc64le"
-          then:
-            - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,performance --bin rattler-build --root ${PREFIX} --path . --no-track
-          else:
-            - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,s3,sigstore,performance --bin rattler-build --root ${PREFIX} --path . --no-track
-        - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
-        - mkdir -p $PREFIX/share/zsh/site-functions
-        - $PREFIX/bin/rattler-build completion --shell zsh > $PREFIX/share/zsh/site-functions/_rattler-build
-        - mkdir -p $PREFIX/share/bash-completion/completions
-        - $PREFIX/bin/rattler-build completion --shell bash > $PREFIX/share/bash-completion/completions/rattler-build
-        - mkdir -p $PREFIX/share/fish/vendor_completions.d
-        - $PREFIX/bin/rattler-build completion --shell fish > $PREFIX/share/fish/vendor_completions.d/rattler-build.fish
-      else:
-        # Win recipe
-        # hack: path too long for pixi_config subpackage, https://github.com/prefix-dev/pixi/issues/3691
-        - set CARGO_HOME=C:\.cargo
-        - md %CARGO_HOME%
-        - set "CARGO_PROFILE_RELEASE_LTO=true"
-        - set "CARGO_PROFILE_RELEASE_STRIP=symbols"
-        - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,s3,performance --bins --root %PREFIX% --path . --no-track
-        - cargo-bundle-licenses --format yaml --output %SRC_DIR%/THIRDPARTY.yml
+    env:
+      CARGO_PROFILE_RELEASE_STRIP: symbols
+      CARGO_PROFILE_RELEASE_LTO: fat
+    content:
+      - if: osx and x86_64
+        then:
+          - if [[ "${MACOSX_SDK_VERSION}" != "11.0" ]]; then exit 1; fi
+          # use the default linker for macOS as we are hitting a bug with the conda-forge linker
+          - unset CARGO_TARGET_X86_64_APPLE_DARWIN_LINKER
+      - if: unix
+        then:
+          # Unix recipe
+          - export OPENSSL_DIR="$PREFIX"
+          - if: target_platform == "linux-ppc64le"
+            then:
+              - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,performance --bin rattler-build --root ${PREFIX} --path . --no-track
+            else:
+              - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,s3,sigstore,performance --bin rattler-build --root ${PREFIX} --path . --no-track
+          - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
+          - mkdir -p $PREFIX/share/zsh/site-functions
+          - $PREFIX/bin/rattler-build completion --shell zsh > $PREFIX/share/zsh/site-functions/_rattler-build
+          - mkdir -p $PREFIX/share/bash-completion/completions
+          - $PREFIX/bin/rattler-build completion --shell bash > $PREFIX/share/bash-completion/completions/rattler-build
+          - mkdir -p $PREFIX/share/fish/vendor_completions.d
+          - $PREFIX/bin/rattler-build completion --shell fish > $PREFIX/share/fish/vendor_completions.d/rattler-build.fish
+        else:
+          # Win recipe
+          # hack: path too long for pixi_config subpackage, https://github.com/prefix-dev/pixi/issues/3691
+          - set CARGO_HOME=C:\.cargo
+          - md %CARGO_HOME%
+          - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,s3,performance --bins --root %PREFIX% --path . --no-track
+          - cargo-bundle-licenses --format yaml --output %SRC_DIR%/THIRDPARTY.yml
   number: 1
 
 requirements:
