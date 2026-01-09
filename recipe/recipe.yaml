@@ -19,7 +19,7 @@ build:
         - unset CARGO_TARGET_X86_64_APPLE_DARWIN_LINKER
     - if: target_platform == "win-arm64" 
       then: 
-        - set CC=clang 
+        - set CC=clang   # ring need it for cross-compiling to target aarch64-pc-windows-msvc
     - if: unix
       then:
         # Unix recipe
