@@ -28,7 +28,7 @@ build:
         # hack: path too long for pixi_config subpackage, https://github.com/prefix-dev/pixi/issues/3691
         - set CARGO_HOME=C:\.cargo
         - md %CARGO_HOME%
-        - cargo install --locked --bins --root %PREFIX% --path . --no-track
+        - cargo install --locked --bin rattler-build --root %PREFIX% --path . --no-track
         - if errorlevel 1 exit 1
         - cargo-bundle-licenses --format yaml --output %SRC_DIR%/THIRDPARTY.yml
         - if errorlevel 1 exit 1
