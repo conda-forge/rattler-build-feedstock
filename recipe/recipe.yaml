@@ -17,6 +17,9 @@ build:
         - if [[ "${MACOSX_SDK_VERSION}" != "11.0" ]]; then exit 1; fi
         # use the default linker for macOS as we are hitting a bug with the conda-forge linker
         - unset CARGO_TARGET_X86_64_APPLE_DARWIN_LINKER
+    - if: target_platform == "win-arm64" 
+      then: 
+        - set CC=clang 
     - if: unix
       then:
         # Unix recipe
