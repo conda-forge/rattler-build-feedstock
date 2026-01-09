@@ -49,6 +49,8 @@ tests:
   - package_contents:
       bin:
         - rattler-build
+      files:
+        - etc/conda/test-files/rattler-build/0/test-recipe/check.yaml
       strict: true
   - script:
       - rattler-build --help
