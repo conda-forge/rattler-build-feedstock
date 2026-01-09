@@ -28,10 +28,6 @@ build:
         # hack: path too long for pixi_config subpackage, https://github.com/prefix-dev/pixi/issues/3691
         - set CARGO_HOME=C:\.cargo
         - md %CARGO_HOME%
-        - if: target_platform == "win-arm64"
-          then:
-            - set CC=clang
-            - set CARGO_TARGET=aarch64-pc-windows-msvc
         - cargo install --locked --bins --root %PREFIX% --path . --no-track
         - if errorlevel 1 exit 1
         - cargo-bundle-licenses --format yaml --output %SRC_DIR%/THIRDPARTY.yml
