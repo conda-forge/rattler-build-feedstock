@@ -1,0 +1,39 @@
+diff --git a/Users/pavel/projects/feedstocks/rattler-build-feedstock/output/bld/rattler-build_rattler-build_1769993896/work/Cargo.toml b/Users/pavel/projects/feedstocks/rattler-build-feedstock/output/bld/rattler-build_rattler-build_1769993896/work/Cargo copy.toml
+index cbeb6f1..5f3ee21 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -66,6 +66,8 @@ native-tls = [
+   'rattler_repodata_gateway/native-tls',
+   'rattler_networking/native-tls',
+   'rattler_package_streaming/native-tls',
++  'rattler_redaction/native-tls',
++  'http-range-client/default-tls',
+ ]
+ rustls-tls = [
+   'reqwest/rustls-tls',
+@@ -75,6 +77,8 @@ rustls-tls = [
+   'rattler_repodata_gateway/rustls-tls',
+   'rattler_networking/rustls-tls',
+   'rattler_package_streaming/rustls-tls',
++  'rattler_redaction/rustls-tls',
++  'http-range-client/rustls-tls',
+ ]
+ tui = [
+   'ratatui',
+@@ -201,7 +205,7 @@ rattler_networking = { version = "0.25.29", default-features = false, features =
+ ] }
+ rattler_upload = { version = "0.4.6", default-features = false }
+ rattler_s3 = { version = "0.1.17", optional = true }
+-rattler_redaction = { version = "0.1.13" }
++rattler_redaction = { version = "0.1.13", default-features = false }
+ rattler_repodata_gateway = { version = "0.25.6", default-features = false, features = [
+   "gateway",
+ ] }
+@@ -224,7 +228,6 @@ line-ending = "1.5.1"
+ flickzeug = "0.4.4"
+ http-range-client = { git = "https://github.com/pka/http-range-client.git", default-features = false, features = [
+   "reqwest-sync",
+-  "rustls-tls",
+ ] }
+ sevenz-rust2 = "0.20.0"
+ dialoguer = "0.12.0"

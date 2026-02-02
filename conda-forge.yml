@@ -1,7 +1,6 @@
 build_platform:
   osx_arm64: osx_64
   linux_aarch64: linux_64
-  linux_ppc64le: linux_64
   win_arm64: win_64
 # See https://github.com/conda-forge/rust-activation-feedstock/issues/58
 # conda_build:
