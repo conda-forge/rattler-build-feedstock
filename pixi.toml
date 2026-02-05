@@ -35,12 +35,6 @@ description = "Build rattler-build-feedstock with variant linux_aarch64_ directl
 [tasks."inspect-linux_aarch64_"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_aarch64_.yaml"
 description = "List contents of rattler-build-feedstock packages built for variant linux_aarch64_"
-[tasks."build-linux_ppc64le_"]
-cmd = "rattler-build build --recipe recipe -m .ci_support/linux_ppc64le_.yaml"
-description = "Build rattler-build-feedstock with variant linux_ppc64le_ directly (without setup scripts)"
-[tasks."inspect-linux_ppc64le_"]
-cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_ppc64le_.yaml"
-description = "List contents of rattler-build-feedstock packages built for variant linux_ppc64le_"
 [tasks."build-osx_64_"]
 cmd = "rattler-build build --recipe recipe -m .ci_support/osx_64_.yaml"
 description = "Build rattler-build-feedstock with variant osx_64_ directly (without setup scripts)"
@@ -59,6 +53,12 @@ description = "Build rattler-build-feedstock with variant win_64_ directly (with
 [tasks."inspect-win_64_"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/win_64_.yaml"
 description = "List contents of rattler-build-feedstock packages built for variant win_64_"
+[tasks."build-win_arm64_"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/win_arm64_.yaml"
+description = "Build rattler-build-feedstock with variant win_arm64_ directly (without setup scripts)"
+[tasks."inspect-win_arm64_"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/win_arm64_.yaml"
+description = "List contents of rattler-build-feedstock packages built for variant win_arm64_"
 
 [feature.smithy.dependencies]
 conda-smithy = "*"
