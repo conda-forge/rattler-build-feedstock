@@ -42,7 +42,7 @@ build:
           # hack: path too long for pixi_config subpackage, https://github.com/prefix-dev/pixi/issues/3691
           - set CARGO_HOME=C:\.cargo
           - md %CARGO_HOME%
-          - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,s3,performance --bins --root %PREFIX% --path . --no-track
+          - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,s3,sigstore,performance --bin rattler-build --root %PREFIX% --path . --no-track
           - cargo-bundle-licenses --format yaml --output %SRC_DIR%/THIRDPARTY.yml
   number: 0
 
