@@ -27,7 +27,7 @@ build:
           - export OPENSSL_DIR="$PREFIX"
           - if: target_platform == "linux-ppc64le"
             then:
-              - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,performance --bin rattler-build --root ${PREFIX} --path . --no-track
+              - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,s3,performance --bin rattler-build --root ${PREFIX} --path . --no-track
             else:
               - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,s3,sigstore,performance --bin rattler-build --root ${PREFIX} --path . --no-track
           - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
