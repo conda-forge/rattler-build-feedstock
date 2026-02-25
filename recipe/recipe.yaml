@@ -14,7 +14,7 @@ build:
   script:
     env:
       CARGO_PROFILE_RELEASE_STRIP: symbols
-      CARGO_PROFILE_RELEASE_LTO: fat
+      CARGO_PROFILE_RELEASE_LTO: ${{ "fat" if not linux and (aarch64 or ppc64le) else "thin" }}
     content:
       - if: osx and x86_64
         then:
