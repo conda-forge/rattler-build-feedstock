@@ -205,10 +205,8 @@ Feedstock Maintainers
 =====================
 
 * [@0xbe7a](https://github.com/0xbe7a/)
+* [@Hofer-Julian](https://github.com/Hofer-Julian/)
 * [@nichmor](https://github.com/nichmor/)
 * [@pavelzw](https://github.com/pavelzw/)
 * [@wolfv](https://github.com/wolfv/)
-
-
-<!-- dummy commit to enable rerendering -->
 
