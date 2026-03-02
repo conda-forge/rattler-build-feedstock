@@ -28,6 +28,7 @@ build:
           # disable -fno-plt, which causes problems with GCC on PPC
           - CFLAGS="$(echo $CFLAGS | sed 's/-fno-plt //g') -fplt"
           - CXXFLAGS="$(echo $CXXFLAGS | sed 's/-fno-plt //g') -fplt"
+          - RUSTFLAGS="-C link-arg=-fuse-ld=bfd"
       - if: unix
         then:
           # Unix recipe
