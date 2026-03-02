@@ -29,6 +29,7 @@ build:
             then:
               - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,s3,performance --bin rattler-build --root ${PREFIX} --path . --no-track
             else:
+              - unset CARGO_TARGET_POWERPC64LE_UNKNOWN_LINUX_GNU_LINKER
               - cargo auditable install --locked --no-default-features --features native-tls,recipe-generation,s3,sigstore,performance --bin rattler-build --root ${PREFIX} --path . --no-track
           - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
           - mkdir -p $PREFIX/share/zsh/site-functions
