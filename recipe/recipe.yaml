@@ -28,7 +28,7 @@ build:
           # disable -fno-plt, which causes problems with GCC on PPC
           - CFLAGS="$(echo $CFLAGS | sed 's/-fno-plt //g') -fplt"
           - CXXFLAGS="$(echo $CXXFLAGS | sed 's/-fno-plt //g') -fplt"
-          - RUSTFLAGS="-C link-arg=-fuse-ld=bfd"
+          - CARGO_TARGET_POWERPC64LE_UNKNOWN_LINUX_GNU_LINKER="powerpc64le-conda-linux-gnu-ld.bfd"
       - if: unix
         then:
           # Unix recipe
