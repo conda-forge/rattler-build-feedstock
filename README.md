@@ -75,6 +75,13 @@ Current build status
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/rattler-build-feedstock?branchName=main&jobName=win&configuration=win%20win_64_" alt="variant">
                 </a>
               </td>
+            </tr><tr>
+              <td>win_arm64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19367&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/rattler-build-feedstock?branchName=main&jobName=win&configuration=win%20win_arm64_" alt="variant">
+                </a>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -206,6 +213,7 @@ Feedstock Maintainers
 
 * [@0xbe7a](https://github.com/0xbe7a/)
 * [@Hofer-Julian](https://github.com/Hofer-Julian/)
+* [@baszalmstra](https://github.com/baszalmstra/)
 * [@nichmor](https://github.com/nichmor/)
 * [@pavelzw](https://github.com/pavelzw/)
 * [@wolfv](https://github.com/wolfv/)

@@ -59,9 +59,11 @@ requirements:
     - cargo-auditable
     - cargo-bundle-licenses
   host:
-    - ${{ "openssl" if linux }}
+    - if: linux
+      then: openssl
   run:
-    - ${{ "patchelf" if linux }}
+    - if: linux
+      then: patchelf
 
 tests:
   - package_contents:
@@ -110,3 +112,4 @@ extra:
     - wolfv
     - pavelzw
     - '0xbe7a'
+    - baszalmstra
