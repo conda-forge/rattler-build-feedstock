@@ -12,7 +12,7 @@ source:
   sha256: 447dec93abb781ac3d8d5b3e8d6e88dad757e5af128cb767dfa86c63d6c63ea0
 
 build:
-  number: 0
+  number: 1
   script:
     env:
       CARGO_PROFILE_RELEASE_STRIP: symbols
@@ -21,6 +21,7 @@ build:
       AWS_LC_SYS_CMAKE_BUILDER: "1"
       CARGO_PROFILE_RELEASE_LTO: ${{ "fat" if not linux and (aarch64 or ppc64le) else "thin" }}
       JEMALLOC_SYS_WITH_LG_PAGE: ${{ '16' if (aarch64 or ppc64le) else '' }}
+      MACOSX_SDK_VERSION: ${{ MACOSX_SDK_VERSION | default("") }}
     content:
       - if: osx and x86_64
         then:
