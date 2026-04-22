@@ -89,6 +89,7 @@ tests:
           # check that we can fetch the sourcecode for slepc
           - rattler-build build --recipe ./test-recipe/check.yaml
         else:
+          - set RATTLER_CACHE_DIR=%PREFIX%\rattler-cache
           - rattler-build build --recipe ./test-recipe/check.yaml --output-dir %PREFIX%/out
     files:
       recipe:
