@@ -1,6 +1,6 @@
 context:
   name: rattler-build
-  version: "0.70.0"
+  version: "0.70.1"
 
 package:
   name: ${{ name }}
@@ -9,7 +9,7 @@ package:
 source:
   url: https://github.com/prefix-dev/rattler-build/archive/refs/tags/v${{ version }}.tar.gz
 
-  sha256: 2cf69e88e10b61bb70c48be736b9762938ee917404b193424757daf5ec47ef4d
+  sha256: b037a68c7e87e36d3268bbd4a4c527f893805a77394eedb48927ac0647d8760c
 
 build:
   number: 0
