@@ -8,11 +8,10 @@ package:
 
 source:
   url: https://github.com/prefix-dev/rattler-build/archive/refs/tags/v${{ version }}.tar.gz
-
   sha256: 7ca617a029b128e61a4b9e77fe02ba6c8291a9ade0490ef304a1f6fd265b80a8
 
 build:
-  number: 0
+  number: 1
   script:
     env:
       CARGO_PROFILE_RELEASE_STRIP: symbols
@@ -33,6 +32,7 @@ build:
           # Unix recipe
           - set -x
           - export OPENSSL_DIR="$PREFIX"
+          - cargo update webpki-root-certs rustls-webpki
           - if: ppc64le
             then:
               # Rust 1.90 uses lld by default and has issue linking to conda libraries
