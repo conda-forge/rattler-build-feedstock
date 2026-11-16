@@ -7,6 +7,8 @@ build_platform:
 conda_build_tool: rattler-build
 conda_forge_output_validation: true
 conda_install_tool: pixi
+github_actions:
+  attest_packages: true
 github:
   branch_name: main
   tooling_branch_name: main

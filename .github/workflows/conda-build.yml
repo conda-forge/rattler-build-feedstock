@@ -25,7 +25,7 @@ jobs:
           - CONFIG: linux_64_
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma10
             STORE_BUILD_ARTIFACTS: False
-            UPLOAD_PACKAGES: True
+            UPLOAD_PACKAGES: False
             build_workspace_dir: build_artifacts
             docker_run_args: 
             free_disk_space: skip
@@ -34,66 +34,6 @@ jobs:
             resize_partitions: False
             runs_on: ['ubuntu-latest']
             tools_install_dir: ~/miniforge3
-          - CONFIG: linux_aarch64_
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64:alma10
-            STORE_BUILD_ARTIFACTS: False
-            UPLOAD_PACKAGES: True
-            build_workspace_dir: build_artifacts
-            docker_run_args: 
-            free_disk_space: skip
-            os: ubuntu
-            pagefile_size: 0
-            resize_partitions: False
-            runs_on: ['ubuntu-24.04-arm']
-            tools_install_dir: ~/miniforge3
-          - CONFIG: linux_ppc64le_
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma10
-            STORE_BUILD_ARTIFACTS: False
-            UPLOAD_PACKAGES: True
-            build_workspace_dir: build_artifacts
-            docker_run_args: 
-            free_disk_space: skip
-            os: ubuntu
-            pagefile_size: 0
-            resize_partitions: False
-            runs_on: ['ubuntu-latest']
-            tools_install_dir: ~/miniforge3
-          - CONFIG: linux_riscv64_
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma10
-            STORE_BUILD_ARTIFACTS: False
-            UPLOAD_PACKAGES: True
-            build_workspace_dir: build_artifacts
-            docker_run_args: 
-            free_disk_space: skip
-            os: ubuntu
-            pagefile_size: 0
-            resize_partitions: False
-            runs_on: ['ubuntu-latest']
-            tools_install_dir: ~/miniforge3
-          - CONFIG: win_64_
-            STORE_BUILD_ARTIFACTS: False
-            UPLOAD_PACKAGES: True
-            build_platform: win-64
-            build_workspace_dir: D:\\bld\\
-            docker_run_args: 
-            free_disk_space: skip
-            os: windows
-            pagefile_size: 0
-            resize_partitions: False
-            runs_on: ['windows-2022']
-            tools_install_dir: D:\Miniforge
-          - CONFIG: win_arm64_
-            STORE_BUILD_ARTIFACTS: False
-            UPLOAD_PACKAGES: True
-            build_platform: win-64
-            build_workspace_dir: D:\\bld\\
-            docker_run_args: 
-            free_disk_space: skip
-            os: windows
-            pagefile_size: 0
-            resize_partitions: False
-            runs_on: ['windows-2022']
-            tools_install_dir: D:\Miniforge
     steps:
 
     - name: Checkout code
@@ -192,3 +132,108 @@ jobs:
         BINSTAR_TOKEN: ${{ secrets.BINSTAR_TOKEN }}
         FEEDSTOCK_TOKEN: ${{ secrets.FEEDSTOCK_TOKEN }}
         STAGING_BINSTAR_TOKEN: ${{ secrets.STAGING_BINSTAR_TOKEN }}
+
+    - name: List uploaded packages for attestation
+      id: attest-subjects
+      # Attestations are best effort and must never fail the build.
+      continue-on-error: true
+      if: ${{ github.event_name != 'pull_request' }}
+      shell: bash
+      env:
+        CONDA_BLD_PATH: ${{ matrix.build_workspace_dir }}
+      run: |
+        set -euo pipefail
+        bld="${CONDA_BLD_PATH/#~/${HOME}}"
+        if command -v cygpath >/dev/null 2>&1; then
+          bld="$(cygpath -u "${bld}")"
+        fi
+        if command -v sha256sum >/dev/null 2>&1; then
+          sha256() { sha256sum "$1" | cut -d' ' -f1; }
+        else
+          sha256() { shasum -a 256 "$1" | cut -d' ' -f1; }
+        fi
+        shopt -s nullglob
+        entries=()
+        for pkg in "${bld}"/*/*.conda "${bld}"/*/*.tar.bz2; do
+          subdir="$(basename "$(dirname "${pkg}")")"
+          # only look at subdir folders, not at caches like pkg_cache
+          [[ "${subdir}" =~ ^(noarch|[a-z0-9]+-[a-z0-9_]+)$ ]] || continue
+          entries+=("{\"name\": \"$(basename "${pkg}")\", \"sha256\": \"$(sha256 "${pkg}")\"}")
+        done
+        if [[ ${#entries[@]} -eq 0 ]]; then
+          echo "No packages to attest"
+          exit 0
+        fi
+        (IFS=,; echo "[${entries[*]}]") > attest-subjects.json
+        cat attest-subjects.json
+        echo "found=true" >> "${GITHUB_OUTPUT}"
+
+    - name: Store package list for attestation
+      if: ${{ steps.attest-subjects.outputs.found == 'true' }}
+      continue-on-error: true
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: attest-subjects-${{ matrix.CONFIG }}
+        path: attest-subjects.json
+        retention-days: 1
+
+  attest-plan:
+    name: Collect packages to attest
+    needs: build
+    # run even if some builds failed, so that every uploaded package is attested
+    if: ${{ !cancelled() && github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    outputs:
+      subjects: ${{ steps.collect.outputs.subjects }}
+    steps:
+    - name: Download package lists
+      uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+      continue-on-error: true
+      with:
+        pattern: attest-subjects-*
+        path: attest-subjects
+
+    - name: Collect packages
+      id: collect
+      shell: bash
+      run: |
+        # a single artifact is extracted directly into the path, several
+        # artifacts into one subfolder each
+        files=()
+        if [[ -d attest-subjects ]]; then
+          mapfile -t files < <(find attest-subjects -name attest-subjects.json)
+        fi
+        if [[ ${#files[@]} -eq 0 ]]; then
+          echo "subjects=[]" >> "${GITHUB_OUTPUT}"
+          exit 0
+        fi
+        subjects="$(jq -c -s 'add | unique_by(.name)' "${files[@]}")"
+        echo "${subjects}" | jq .
+        echo "subjects=${subjects}" >> "${GITHUB_OUTPUT}"
+
+  attest:
+    name: Attest ${{ matrix.name }}
+    needs: attest-plan
+    if: ${{ !cancelled() && needs.attest-plan.outputs.subjects != '' && needs.attest-plan.outputs.subjects != '[]' }}
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.attest-plan.outputs.subjects) }}
+    steps:
+    # One attestation per package, as required by CEP-27. The attestation is
+    # stored in the GitHub attestation API of this repository, where channels
+    # can look it up by the package's SHA-256.
+    - name: Attest package
+      uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+      with:
+        subject-name: ${{ matrix.name }}
+        subject-digest: sha256:${{ matrix.sha256 }}
+        predicate-type: https://schemas.conda.org/attestations-publish-1.schema.json
+        predicate: '{"targetChannel": "https://prefix.dev/conda-forge"}'
